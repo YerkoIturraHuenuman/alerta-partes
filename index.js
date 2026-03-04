@@ -14,7 +14,7 @@ let primeraEjecucion = true;
 
 // ===================== HELPERS ===========================
 
-const hora = () => new Date().toLocaleString('es-CL');
+const hora = () => new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
 const sep = '━'.repeat(52);
 
 function log(icono, msg) {
@@ -112,6 +112,6 @@ console.log(`  ${sep}`);
 
 await verificar();
 
-cron.schedule(CRON_SCHEDULE, verificar);
+cron.schedule(CRON_SCHEDULE, verificar, { timezone: 'America/Santiago' });
 
 console.log(`\n  🟢  Proceso activo — Ctrl+C para detener\n`);
