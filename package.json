@@ -1,0 +1,16 @@
+{
+  "name": "cron-partes",
+  "version": "1.0.0",
+  "description": "Consulta de partes empadronados Las Condes Online",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^8.0.1"
+  }
+}
