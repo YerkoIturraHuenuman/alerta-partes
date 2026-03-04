@@ -1,0 +1,28 @@
+name: Monitor Partes
+
+on:
+  schedule:
+    # Cada 5 minutos (GitHub puede tener retrasos de ~1-5 min)
+    - cron: "*/5 * * * *"
+  workflow_dispatch: # Permite ejecutar manualmente desde GitHub
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Restaurar cache de partes conocidos
+        uses: actions/cache@v4
+        with:
+          path: cache-partes.json
+          key: partes-${{ github.run_id }}
+          restore-keys: partes-
+
+      - run: npm install
+
+      - run: node check.js
