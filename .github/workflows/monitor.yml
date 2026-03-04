@@ -3,7 +3,7 @@ run-name: "🔍 Check ${{ github.event_name }} — ${{ github.run_id }}"
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 * * * 1-5"
   push:
     branches: [main]
   workflow_dispatch:
