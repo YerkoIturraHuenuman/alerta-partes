@@ -1,11 +1,11 @@
-import cron from 'node-cron';
-import { consultarPartes } from './scraper.js';
-import { enviarAlerta } from './mailer.js';
+import cron from "node-cron";
+import { consultarPartes } from "./scraper.js";
+import { enviarAlerta } from "./mailer.js";
 
 // ===================== CONFIGURACIÓN =====================
 
-const PLACA = 'VGDC62';
-const CRON_SCHEDULE = '*/10 * * * * *'; // cada 10 segundos
+const PLACA = "VGDC62";
+const CRON_SCHEDULE = "*/10 * * * * *"; // cada 10 segundos
 
 // ===================== ESTADO EN MEMORIA =================
 
@@ -14,8 +14,9 @@ let primeraEjecucion = true;
 
 // ===================== HELPERS ===========================
 
-const hora = () => new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
-const sep = '━'.repeat(52);
+const hora = () =>
+  new Date().toLocaleString("es-CL", { timeZone: "America/Santiago" });
+const sep = "━".repeat(52);
 
 function log(icono, msg) {
   console.log(`  ${icono}  ${msg}`);
@@ -26,8 +27,8 @@ function tablaMultas(multas) {
   const anchoFecha = 12;
   const anchoValor = 12;
 
-  const header = `${'N° Parte'.padEnd(anchoNum)}  ${'Fecha'.padEnd(anchoFecha)}  ${'Valor'.padStart(anchoValor)}`;
-  const linea = '─'.repeat(anchoNum + anchoFecha + anchoValor + 6);
+  const header = `${"N° Parte".padEnd(anchoNum)}  ${"Fecha".padEnd(anchoFecha)}  ${"Valor".padStart(anchoValor)}`;
+  const linea = "─".repeat(anchoNum + anchoFecha + anchoValor + 6);
 
   console.log(`     ${linea}`);
   console.log(`     ${header}`);
@@ -44,17 +45,19 @@ function tablaMultas(multas) {
 // ===================== ALERTA ============================
 
 async function alerta(nuevasMultas) {
-  console.log('');
-  console.log(`  ┌${'─'.repeat(50)}┐`);
-  console.log(`  │  🚨  ALERTA: ${nuevasMultas.length} NUEVA(S) MULTA(S)${' '.repeat(18 - nuevasMultas.length.toString().length)}│`);
-  console.log(`  └${'─'.repeat(50)}┘`);
+  console.log("");
+  console.log(`  ┌${"─".repeat(50)}┐`);
+  console.log(
+    `  │  🚨  ALERTA: ${nuevasMultas.length} NUEVA(S) MULTA(S)${" ".repeat(18 - nuevasMultas.length.toString().length)}│`,
+  );
+  console.log(`  └${"─".repeat(50)}┘`);
   tablaMultas(nuevasMultas);
 
   try {
     await enviarAlerta(PLACA, nuevasMultas);
-    log('📧', 'Correo enviado a yerko.iturra@gmail.com');
+    log("📧", "Correo enviado a yerko.iturra@gmail.com");
   } catch (err) {
-    log('❌', `Error enviando correo: ${err.message}`);
+    log("❌", `Error enviando correo: ${err.message}`);
   }
 }
 
@@ -76,7 +79,7 @@ async function verificar() {
     if (primeraEjecucion) {
       primeraEjecucion = false;
       if (multas.length === 0) {
-        log('✅', 'Sin multas impagas. Monitoreando...');
+        log("✅", "Sin multas impagas. Monitoreando...");
       } else {
         await alerta(multas);
       }
@@ -84,7 +87,7 @@ async function verificar() {
     }
 
     if (pagadas.length > 0) {
-      log('💸', `${pagadas.length} multa(s) pagada(s):`);
+      log("💸", `${pagadas.length} multa(s) pagada(s):`);
       pagadas.forEach((id) => console.log(`        ✓ N° ${id}`));
     }
 
@@ -93,18 +96,21 @@ async function verificar() {
     }
 
     if (nuevas.length === 0 && pagadas.length === 0) {
-      log('✅', `Sin cambios · ${multas.length} multa(s) impaga(s) conocida(s)`);
+      log(
+        "✅",
+        `Sin cambios · ${multas.length} multa(s) impaga(s) conocida(s)`,
+      );
     }
   } catch (error) {
-    log('❌', `Error: ${error.message}`);
+    log("❌", `Error: ${error.message}`);
   }
 }
 
 // ===================== ARRANQUE ==========================
 
-console.log('');
+console.log("");
 console.log(`  ${sep}`);
-console.log('  🔍  Monitor de Partes — Las Condes Online');
+console.log("  🔍  Monitor de Partes — Las Condes Online");
 console.log(`  ${sep}`);
 console.log(`  Placa:  ${PLACA}`);
 console.log(`  Cron:   ${CRON_SCHEDULE}`);
@@ -112,6 +118,6 @@ console.log(`  ${sep}`);
 
 await verificar();
 
-cron.schedule(CRON_SCHEDULE, verificar, { timezone: 'America/Santiago' });
+cron.schedule(CRON_SCHEDULE, verificar, { timezone: "America/Santiago" });
 
 console.log(`\n  🟢  Proceso activo — Ctrl+C para detener\n`);
