@@ -5,7 +5,7 @@ import { enviarAlerta } from './mailer.js';
 // ===================== CONFIGURACIÓN =====================
 
 const PLACA = 'VGDC62';
-const CRON_SCHEDULE = '0 */5 * * * *'; // cada 5 minutos
+const CRON_SCHEDULE = '*/10 * * * * *'; // cada 10 segundos
 
 // ===================== ESTADO EN MEMORIA =================
 
@@ -50,12 +50,12 @@ async function alerta(nuevasMultas) {
   console.log(`  └${'─'.repeat(50)}┘`);
   tablaMultas(nuevasMultas);
 
-  try {
-    await enviarAlerta(PLACA, nuevasMultas);
-    log('📧', 'Correo enviado a yerko.iturra@gmail.com');
-  } catch (err) {
-    log('❌', `Error enviando correo: ${err.message}`);
-  }
+  // try {
+  //   await enviarAlerta(PLACA, nuevasMultas);
+  //   log('📧', 'Correo enviado a yerko.iturra@gmail.com');
+  // } catch (err) {
+  //   log('❌', `Error enviando correo: ${err.message}`);
+  // }
 }
 
 // ===================== LÓGICA PRINCIPAL ==================
