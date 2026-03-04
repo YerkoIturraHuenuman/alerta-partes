@@ -50,12 +50,12 @@ async function alerta(nuevasMultas) {
   console.log(`  └${'─'.repeat(50)}┘`);
   tablaMultas(nuevasMultas);
 
-  // try {
-  //   await enviarAlerta(PLACA, nuevasMultas);
-  //   log('📧', 'Correo enviado a yerko.iturra@gmail.com');
-  // } catch (err) {
-  //   log('❌', `Error enviando correo: ${err.message}`);
-  // }
+  try {
+    await enviarAlerta(PLACA, nuevasMultas);
+    log('📧', 'Correo enviado a yerko.iturra@gmail.com');
+  } catch (err) {
+    log('❌', `Error enviando correo: ${err.message}`);
+  }
 }
 
 // ===================== LÓGICA PRINCIPAL ==================
