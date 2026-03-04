@@ -2,9 +2,10 @@ name: Monitor Partes
 
 on:
   schedule:
-    # Cada 5 minutos (GitHub puede tener retrasos de ~1-5 min)
     - cron: "*/5 * * * *"
-  workflow_dispatch: # Permite ejecutar manualmente desde GitHub
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   check:
@@ -16,11 +17,13 @@ jobs:
         with:
           node-version: "20"
 
+      # Cache para recordar multas entre ejecuciones del cron.
+      # Usa el hash del commit como key: cada push genera un key nuevo = cache limpio.
       - name: Restaurar cache de partes conocidos
         uses: actions/cache@v4
         with:
           path: cache-partes.json
-          key: partes-${{ github.run_id }}
+          key: partes-${{ github.sha }}
           restore-keys: partes-
 
       - run: npm install
