@@ -1,0 +1,38 @@
+name: Monitor Partes
+run-name: "🔍 Check ${{ github.event_name }} — ${{ github.run_id }}"
+
+on:
+  schedule:
+    - cron: "0 * * * 1-5"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Cache para recordar multas entre ejecuciones del cron.
+      # Usa el hash del commit como key: cada push genera un key nuevo = cache limpio.
+      - name: Restaurar cache de partes conocidos
+        uses: actions/cache@v4
+        with:
+          path: cache-partes.json
+          key: partes-${{ github.sha }}
+          restore-keys: partes-
+
+      - run: npm install
+
+      - run: node index.js
+        env:
+          IS_CI: "true"
+          PLACA: ${{ secrets.PLACA }}
+          CORREO: ${{ secrets.CORREO }}
+          USER_SMTP: ${{ secrets.USER_SMTP }}
+          PASS_SMTP: ${{ secrets.PASS_SMTP }}

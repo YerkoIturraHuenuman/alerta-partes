@@ -1,0 +1,4 @@
+node_modules
+cache-partes.json
+package-lock.json
+.claude
